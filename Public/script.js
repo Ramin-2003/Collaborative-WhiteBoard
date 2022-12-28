@@ -79,6 +79,8 @@ function onMouseMove(e) {
         current.color,
         true
     );
+    current.x = e.clientX || e.touches[0].clientX;
+    current.y = e.clientY || e.touches[0].clientY;
 }
 
 // dekstop events
@@ -108,4 +110,4 @@ function onDrawingEvent(data) {
     drawLine(data.x0 * w, data.y0 * h, data.x1 * w, data.y1 * h, data.color);
 }
 
-socket.on("drawing", onDrawingEvent);
+socket.on("drawing", onDrawingEvent)
