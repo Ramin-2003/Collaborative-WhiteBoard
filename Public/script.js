@@ -82,14 +82,22 @@ function onMouseMove(e) {
 }
 
 // dekstop events
-canvas.addEventListener("mousedown", onMouseDown, false)
-canvas.addEventListener("mouseup", onMouseUp, false)
-canvas.addEventListener("mouseout", onMouseUp, false)
-canvas.addEventListener("mousemove", throttle(onMouseMove, 10), false)
+canvas.addEventListener("mousedown", onMouseDown, false);
+canvas.addEventListener("mouseup", onMouseUp, false);
+canvas.addEventListener("mouseout", onMouseUp, false);
+canvas.addEventListener("mousemove", throttle(onMouseMove, 10), false);
 
 
 // mobile events
-canvas.addEventListener("touchstart", onMouseDown, false)
-canvas.addEventListener("touchend", onMouseUp, false)
-canvas.addEventListener("touchcancel", onMouseUp, false)
-canvas.addEventListener("touchmove", throttle(onMouseMove, 10), false)
+canvas.addEventListener("touchstart", onMouseDown, false);
+canvas.addEventListener("touchend", onMouseUp, false);
+canvas.addEventListener("touchcancel", onMouseUp, false);
+canvas.addEventListener("touchmove", throttle(onMouseMove, 10), false);
+
+function onResize() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+}
+
+window.addEventListener("resize", onResize, false);
+onResize();
