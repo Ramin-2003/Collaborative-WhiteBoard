@@ -8,6 +8,18 @@ var context = canvas.getContext("2d");
 var drawing = false;
 var current = { color: "black" };
 
+function throttle(callback, delay) {
+    var previousCall =  new Date().getTime();
+    return function () {
+        var time = new Date().getTime();
+
+        if (time - previousCall >= delay) {
+            previousCall = time;
+            callback.apply(null, arguments);
+        }
+    };
+}
+
 function drawLine(x0, y0, x1, y1, color, emit) {
     context.beginPath();
     context.moveTo(x0, y0);
@@ -28,7 +40,8 @@ function drawLine(x0, y0, x1, y1, color, emit) {
        x0: x0 / w,
        y0: y0 / h,
        x1: x1 / w,
-       y1: y1 / h
+       y1: y1 / h,
+       color
     });
 }
 
