@@ -11,6 +11,19 @@
     <body>
         <canvas class = "whiteboard"> </canvas>
 
+        <div id = "UI">
+        <div id = "buttons">
+        <button onclick="colorChange(id)" class = "color" id = "black"></button>
+        <button onclick="colorChange(id)" class = "color" id = "red"></button>
+        <button onclick="colorChange(id)" class = "color" id = "green"></button>
+        <button onclick="colorChange(id)" class = "color" id = "blue"></button>
+        </div>
+ 
+        <div id = "stroke">
+            <input type="range" min="1" max="50" value="10" id="slider">
+        </div>
+        </div>
+
         <script src ="/socket.io/socket.io.js"></script>
         <script src ="script.js"></script>
     </body>

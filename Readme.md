@@ -2,4 +2,4 @@
 
 ## Description
 
-A collaborative real time whiteboard to share ideas across the globe.
+An online collaborative real time whiteboard.

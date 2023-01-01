@@ -13,5 +13,5 @@ const onConnection = socket => {
 io.on("connection", onConnection);
 
 http.listen(port, () => {
-    console.log(`Server has started in port ${port}.`);
+    console.log(`Server has started on port ${port}.`);
 });

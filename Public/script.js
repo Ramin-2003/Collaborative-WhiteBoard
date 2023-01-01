@@ -6,7 +6,15 @@ var canvas = document.querySelector(".whiteboard");
 // configuration 
 var context = canvas.getContext("2d");
 var drawing = false;
-var current = { color: "black" };
+var current = { color: "black", strokeSize: "10" };
+
+document.getElementById("slider").oninput = () => {
+    current.strokeSize = document.getElementById("slider").value;
+}
+
+function colorChange(id) {
+    current.color = id
+}
 
 function throttle(callback, delay) {
     var previousCall =  new Date().getTime();
@@ -20,12 +28,13 @@ function throttle(callback, delay) {
     };
 }
 
-function drawLine(x0, y0, x1, y1, color, emit) {
+function drawLine(x0, y0, x1, y1, color, strokeSize, emit) {
     context.beginPath();
     context.moveTo(x0, y0);
     context.lineTo(x1, y1);
     context.strokeStyle = color;
-    context.lineWidth = 2;
+    context.lineCap = "round";
+    context.lineWidth = strokeSize;
     context.stroke();
     context.closePath();
 
@@ -41,7 +50,8 @@ function drawLine(x0, y0, x1, y1, color, emit) {
        y0: y0 / h,
        x1: x1 / w,
        y1: y1 / h,
-       color
+       color,
+       strokeSize
     });
 }
 
@@ -63,6 +73,7 @@ function onMouseUp(e) {
         e.clientX || e.touches[0].clientX,
         e.clientY || e.touches[0].clientY,
         current.color,
+        current.strokeSize,
         true
     );
 }
@@ -77,6 +88,7 @@ function onMouseMove(e) {
         e.clientX || e.touches[0].clientX,
         e.clientY || e.touches[0].clientY,
         current.color,
+        current.strokeSize,
         true
     );
     current.x = e.clientX || e.touches[0].clientX;
@@ -99,6 +111,7 @@ canvas.addEventListener("touchmove", throttle(onMouseMove, 10), false);
 function onResize() {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
+    
 }
 
 window.addEventListener("resize", onResize, false);
@@ -107,7 +120,7 @@ onResize();
 function onDrawingEvent(data) {
     var w = canvas.width;
     var h = canvas.height;
-    drawLine(data.x0 * w, data.y0 * h, data.x1 * w, data.y1 * h, data.color);
+    drawLine(data.x0 * w, data.y0 * h, data.x1 * w, data.y1 * h, data.color, data.strokeSize);
 }
 
 socket.on("drawing", onDrawingEvent)
