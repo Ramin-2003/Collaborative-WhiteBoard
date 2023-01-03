@@ -7,6 +7,7 @@ var canvas = document.querySelector(".whiteboard");
 var context = canvas.getContext("2d");
 var drawing = false;
 var current = { color: "black", strokeSize: "10" };
+var idTemp = "black";
 
 document.getElementById("slider").oninput = () => {
     current.strokeSize = document.getElementById("slider").value;
@@ -14,6 +15,9 @@ document.getElementById("slider").oninput = () => {
 
 function colorChange(id) {
     current.color = id
+    document.getElementById(idTemp).className = "color"
+    document.getElementById(id).className = "color2"
+    idTemp = id;
 }
 
 function throttle(callback, delay) {
