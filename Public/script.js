@@ -1,9 +1,23 @@
 // socket initialization
 var socket = io();
-var canvas = document.querySelector(".whiteboard");
 
+
+// rooms logic
+
+userName = null;
+roomCode = null;
+function createRoom() {
+    userName = document.getElementById("nameinput").value;
+    roomCode = document.getElementById("roominput").value;
+    console.log(roomCode);
+    socket.emit("create", {userName, roomCode});
+    document.getElementById("show").id = "hide";
+}
+
+// draw logic
 
 // configuration 
+var canvas = document.querySelector(".whiteboard");
 var context = canvas.getContext("2d");
 var drawing = false;
 var current = { color: "black", strokeSize: "10" };
@@ -127,4 +141,4 @@ function onDrawingEvent(data) {
     drawLine(data.x0 * w, data.y0 * h, data.x1 * w, data.y1 * h, data.color, data.strokeSize);
 }
 
-socket.on("drawing", onDrawingEvent)
+socket.on("drawing", onDrawingEvent);
