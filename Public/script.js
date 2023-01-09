@@ -4,14 +4,42 @@ var socket = io();
 
 // rooms logic
 
-userName = null;
-roomCode = null;
+var users = []
+
+const newUser = clients => {
+    users = clients.users;
+    console.log(users[users.length-1] + " joined");
+}
+socket.on("users", newUser);
+
+var userName = null;
+var roomCode = null;
 function createRoom() {
     userName = document.getElementById("nameinput").value;
     roomCode = document.getElementById("roominput").value;
-    console.log(roomCode);
-    socket.emit("create", {userName, roomCode});
-    document.getElementById("show").id = "hide";
+    socket.emit("created", {userName, roomCode});
+    socket.on("valid", () => {
+        users.push(userName);
+        document.getElementById("menu").id = "hide";
+        return;
+    });
+    socket.on("invalid", () => {
+        document.getElementById("error").innerHTML = "This room already exists";
+    });
+}
+
+
+function joinRoom() {
+    userName = document.getElementById("nameinput").value;
+    roomCode = document.getElementById("roominput").value;
+    socket.emit("joined", {userName, roomCode});
+    socket.on("valid", () => {
+        document.getElementById("menu").id = "hide";
+        return;
+    });
+    socket.on("invalid", () => {
+        document.getElementById("error").innerHTML = "This room does not exist";
+    });
 }
 
 // draw logic
@@ -140,5 +168,4 @@ function onDrawingEvent(data) {
     var h = canvas.height;
     drawLine(data.x0 * w, data.y0 * h, data.x1 * w, data.y1 * h, data.color, data.strokeSize);
 }
-
 socket.on("drawing", onDrawingEvent);

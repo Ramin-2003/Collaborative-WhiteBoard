@@ -10,7 +10,7 @@
 
     <body>
 
-        <div id="show">
+        <div id="menu">
             <div id="box"></div>
             <div id="noclick"></div>
             
@@ -21,11 +21,20 @@
                 <h2 class="text">Room Code:</h2>
                 <input type="text" class="textbox" id="roominput">
                 
-                <br><br>
-                <button onclick="createRoom()">Create</button>
-                <button onclick="joinRoom()">Join</button>
+                <p id="error"> </p>
+
+                <br>
+                <button onclick="createRoom()" id="create">Create</button>
+                <button onclick="joinRoom()" id="join">Join</button>
             </div>
         </div>
+
+        <!-- <div id="users">
+            <ul id="userlist">
+                <li>users</li>
+            </ul> -->
+
+        <!-- </div> -->
 
         <!--Drawing-->
         <svg width="100%" height="100%" id="grid">
@@ -45,7 +54,6 @@
         <button onclick="colorChange(id)" class = "color" id = "blue"></button>
         </div>
 
-        
         <input type="range" min="1" max="55" value="10" id="slider">
 
         </div>
