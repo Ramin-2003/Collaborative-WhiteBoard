@@ -5,12 +5,9 @@ var socket = io();
 // rooms logic
 
 var users = []
-
-const newUser = clients => {
+socket.on("usersupdate", clients => {
     users = clients.users;
-    console.log(users[users.length-1] + " joined");
-}
-socket.on("users", newUser);
+});
 
 var userName = null;
 var roomCode = null;
