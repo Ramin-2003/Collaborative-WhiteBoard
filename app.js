@@ -15,7 +15,7 @@ const onConnection = socket => {
     socket.on("created", user => {
         for (var i = 0; i < clients.length; i++) {
             if (clients[i].roomCode == user.roomCode) {
-                io.to(socket.id).emit("invalid");
+                io.to(socket.id).emit("invalid", "Room already exists");
                 return;
             }
         }
@@ -27,6 +27,7 @@ const onConnection = socket => {
             identities: [socket.id]
         };
         clients.push(user);
+        io.in(user.roomCode).emit("usersupdate", clients[clients.length - 1])
         socket.on("drawing", data => socket.broadcast.to(user.roomCode).emit("drawing", data)); // broadcast data to all clients in room
     });
     socket.on("joined", user => {
@@ -41,7 +42,7 @@ const onConnection = socket => {
                 return;
             }
         }
-        io.to(socket.id).emit("invalid");
+        io.to(socket.id).emit("invalid", "Room does not exist");
     })
 
     socket.on("disconnecting", () => {
@@ -51,10 +52,10 @@ const onConnection = socket => {
                 clients[i].identities.splice(index, 1);
                 clients[i].users.splice(index, 1);
                 
-                io.in(clients[i].roomCode).emit("usersupdate", clients[i].users) // emit usernames update to all clients in room
+                io.in(clients[i].roomCode).emit("usersupdate", clients[i]) // emit usernames update to all clients in room
                 
                 if (clients[i].users.length == 0) { // delete room if no more users
-                    clients.splice(i,1);
+                    clients.splice(i, 1);
                 }
                 return;
             }

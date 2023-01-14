@@ -5,8 +5,12 @@ var socket = io();
 // rooms logic
 
 var users = []
-socket.on("usersupdate", clients => {
-    users = clients.users;
+socket.on("usersupdate", client => {
+    users = client.users;
+    document.getElementById("userlist").innerHTML = "<u><strong>USERS</strong></u> <br><br>";
+    for (var i = 0; i < users.length; i++) {
+        document.getElementById("userlist").innerHTML += users[i] + "<br>";
+    }
 });
 
 var userName = null;
@@ -14,14 +18,21 @@ var roomCode = null;
 function createRoom() {
     userName = document.getElementById("nameinput").value;
     roomCode = document.getElementById("roominput").value;
+
+    if (userName.length == 0 || roomCode.length == 0) {
+        document.getElementById("error").innerHTML = "Please fill in both fields"
+        return;
+    }
+    
     socket.emit("created", {userName, roomCode});
     socket.on("valid", () => {
         users.push(userName);
         document.getElementById("menu").id = "hide";
+        document.getElementById("blur").id = "hide";
         return;
     });
-    socket.on("invalid", () => {
-        document.getElementById("error").innerHTML = "This room already exists";
+    socket.on("invalid", errorMessage => {
+        document.getElementById("error").innerHTML = errorMessage;
     });
 }
 
@@ -29,14 +40,35 @@ function createRoom() {
 function joinRoom() {
     userName = document.getElementById("nameinput").value;
     roomCode = document.getElementById("roominput").value;
+
+    if (userName.length == 0 || roomCode.length == 0) {
+        document.getElementById("error").innerHTML = "Please fill in both fields"
+        return;
+    }   
+
     socket.emit("joined", {userName, roomCode});
     socket.on("valid", () => {
         document.getElementById("menu").id = "hide";
+        document.getElementById("blur").id = "hide";
         return;
     });
-    socket.on("invalid", () => {
-        document.getElementById("error").innerHTML = "This room does not exist";
+    socket.on("invalid", errorMessage => {
+        document.getElementById("error").innerHTML = errorMessage;
     });
+}
+
+function translation() {
+    if (document.getElementById("container").style.left == "0px") {
+        document.getElementById("container").style.left = "-200px";
+
+        document.getElementById("arrowL").innerHTML = "<strong>></strong>";
+        document.getElementById("arrowL").id = "arrowR";
+        return;
+    }
+    document.getElementById("container").style.left = "0px";
+
+    document.getElementById("arrowR").innerHTML = "<strong><</strong>";
+    document.getElementById("arrowR").id = "arrowL";
 }
 
 // draw logic
@@ -45,6 +77,7 @@ function joinRoom() {
 var canvas = document.querySelector(".whiteboard");
 var context = canvas.getContext("2d");
 var drawing = false;
+var erasing = false;
 var current = { color: "black", strokeSize: "10" };
 var idTemp = "black";
 
@@ -154,7 +187,6 @@ canvas.addEventListener("touchmove", throttle(onMouseMove, 10), false);
 function onResize() {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
-    
 }
 
 window.addEventListener("resize", onResize, false);
