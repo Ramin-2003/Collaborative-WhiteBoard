@@ -76,10 +76,17 @@ function translation() {
 // configuration 
 var canvas = document.querySelector(".whiteboard");
 var context = canvas.getContext("2d");
+var tool = "draw";
 var drawing = false;
 var erasing = false;
 var current = { color: "black", strokeSize: "10" };
 var idTemp = "black";
+
+function toolCurrent(id) {
+    tool = id;
+    console.log(tool);
+    console.log("Test");
+}
 
 document.getElementById("slider").oninput = () => {
     current.strokeSize = document.getElementById("slider").value;
@@ -129,6 +136,19 @@ function drawLine(x0, y0, x1, y1, color, strokeSize, emit) {
        color,
        strokeSize
     });
+}
+
+function eraseLine(x, y, radius, emit) {
+    context.beginPath();
+    context.arc(x, y, radius, 0, 2 * Math.PI, false);
+    context.clip();
+    context.clearRect(x-radius - 1, y - radius - 1, radius * 2 + 2, radius * 2 + 2);
+
+    if (!emit) {
+        return;
+    }
+
+    socket.emit("erasing", {x, y, radius}); 
 }
 
 function onMouseDown(e) {

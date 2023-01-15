@@ -39,13 +39,17 @@
         <canvas class = "whiteboard"> </canvas>
 
         <div id = "UI">
-        <div id = "buttons">
-        <button onclick="colorChange(id)" class = "color2" id = "black"></button>
-        <button onclick="colorChange(id)" class = "color" id = "red"></button>
-        <button onclick="colorChange(id)" class = "color" id = "green"></button>
-        <button onclick="colorChange(id)" class = "color" id = "blue"></button>
-        </div>
-        <input type="range" min="1" max="55" value="10" id="slider">
+            <div id = "buttons">
+                <button onclick="colorChange(id)" class = "color2" id = "black"></button>
+                <button onclick="colorChange(id)" class = "color" id = "red"></button>
+                <button onclick="colorChange(id)" class = "color" id = "green"></button>
+                <button onclick="colorChange(id)" class = "color" id = "blue"></button>
+        
+                <div id="tools">
+                    <button onclick="toolCurrent(id)" id="erase"><img src="./Assets/eraser.png" id="eraser" class="tool"></button>
+                </div>
+            </div>
+            <input type="range" min="1" max="55" value="10" id="slider">
         </div>
 
         <svg width="100%" height="100%" id="grid">

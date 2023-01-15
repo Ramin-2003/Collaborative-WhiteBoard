@@ -23,7 +23,7 @@ body {
     bottom: 1%;
     margin-bottom: 0px;
     z-index: 2;
-    pointer-events: none; 
+    pointer-events: none;
     
     /* make non-selectable */
     user-select: none;
@@ -79,6 +79,26 @@ body {
     background-color: blue;
 }
 
+#tools {
+    display: inline;
+    margin-left: 10px;
+    pointer-events: all;
+}
+.tool {
+    width: 30px;
+    height: auto;
+    transition: 0.5s;
+}
+.tool:hover {
+    width: 45px;
+    height: auto;
+    transition: 0.5s;
+}
+#erase {
+    background: none;
+    border: none;
+    vertical-align: middle;
+}
 
 /* draw.html css */
 
@@ -242,7 +262,6 @@ body {
     height: 100%;
     z-index: 4;
 }
-
 
 #grid {
     position: fixed;
