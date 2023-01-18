@@ -31,6 +31,10 @@
 
         <div class="users" id="container">
             <div id="userlist"></div>
+            <span id="roomcode">
+                <h3><hr><strong>Room Code</strong></h3>
+                <p id="code"></p>
+            </span>
         </div>
         <button onclick="translation()" id="arrowR"><strong>></strong></button>
 
@@ -44,11 +48,14 @@
                 <button onclick="colorChange(id)" class = "color" id = "red"></button>
                 <button onclick="colorChange(id)" class = "color" id = "green"></button>
                 <button onclick="colorChange(id)" class = "color" id = "blue"></button>
-        
-                <div id="tools">
-                    <button onclick="toolCurrent(id)" id="erase"><img src="./Assets/eraser.png" id="eraser" class="tool"></button>
-                </div>
+                <button onclick="colorChange(id)" class = "color" id = "yellow"></button>
             </div>
+            
+            <div id="tools">
+                <button onclick="toolCurrent(id)" id="erase"><img src="./Assets/eraser.png" id="eraser" class="tool"></button>
+                <button onclick="toolCurrent(id)" id="draw"><img src="./Assets/drawer.png" id="drawer" class="tool2"></button>
+            </div>
+            
             <input type="range" min="1" max="55" value="10" id="slider">
         </div>
 

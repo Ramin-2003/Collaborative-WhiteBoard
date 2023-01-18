@@ -19,8 +19,10 @@ const onConnection = socket => {
                 return;
             }
         }
+
         io.to(socket.id).emit("valid");
         socket.join(user.roomCode);
+        
         var user = {
             roomCode: user.roomCode,
             users: [user.userName],
@@ -28,17 +30,22 @@ const onConnection = socket => {
         };
         clients.push(user);
         io.in(user.roomCode).emit("usersupdate", clients[clients.length - 1])
+
         socket.on("drawing", data => socket.broadcast.to(user.roomCode).emit("drawing", data)); // broadcast data to all clients in room
+        socket.on("erasing", data => socket.broadcast.to(user.roomCode).emit("erasing", data));
     });
     socket.on("joined", user => {
         for (var i = 0; i < clients.length; i++) {
             if (clients[i].roomCode == user.roomCode) {
                 io.to(socket.id).emit("valid");
                 socket.join(user.roomCode);
+
                 clients[i].users.push(user.userName);
                 clients[i].identities.push(socket.id);
                 io.in(user.roomCode).emit("usersupdate", clients[i]);
+
                 socket.on("drawing", data => socket.broadcast.to(user.roomCode).emit("drawing", data)); // broadcast data to all clients in room
+                socket.on("erasing", data => socket.broadcast.to(user.roomCode).emit("erasing", data));
                 return;
             }
         }

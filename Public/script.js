@@ -7,10 +7,11 @@ var socket = io();
 var users = []
 socket.on("usersupdate", client => {
     users = client.users;
-    document.getElementById("userlist").innerHTML = "<u><strong>USERS</strong></u> <br><br>";
+    document.getElementById("userlist").innerHTML = "<strong>USERS</strong> <hr>";
     for (var i = 0; i < users.length; i++) {
         document.getElementById("userlist").innerHTML += users[i] + "<br>";
     }
+    document.getElementById("code").innerHTML = "\"" + client.roomCode + "\"";
 });
 
 var userName = null;
@@ -77,15 +78,17 @@ function translation() {
 var canvas = document.querySelector(".whiteboard");
 var context = canvas.getContext("2d");
 var tool = "draw";
+var idTempTool = "draw";
+var idTempColor = "black";
 var drawing = false;
 var erasing = false;
-var current = { color: "black", strokeSize: "10" };
-var idTemp = "black";
+var current = { color: "black", strokeSize: 10 };
 
 function toolCurrent(id) {
     tool = id;
-    console.log(tool);
-    console.log("Test");
+    document.getElementById(idTempTool).firstChild.className = "tool"
+    document.getElementById(id).firstChild.className = "tool2"
+    idTempTool = id
 }
 
 document.getElementById("slider").oninput = () => {
@@ -94,9 +97,9 @@ document.getElementById("slider").oninput = () => {
 
 function colorChange(id) {
     current.color = id
-    document.getElementById(idTemp).className = "color"
+    document.getElementById(idTempColor).className = "color"
     document.getElementById(id).className = "color2"
-    idTemp = id;
+    idTempColor = id;
 }
 
 function throttle(callback, delay) {
@@ -139,56 +142,74 @@ function drawLine(x0, y0, x1, y1, color, strokeSize, emit) {
 }
 
 function eraseLine(x, y, radius, emit) {
+
     context.beginPath();
     context.arc(x, y, radius, 0, 2 * Math.PI, false);
+    context.closePath();
+
+    context.save();
     context.clip();
-    context.clearRect(x-radius - 1, y - radius - 1, radius * 2 + 2, radius * 2 + 2);
+    context.clearRect(0, 0, canvas.width, canvas.height);
+    context.restore();
 
     if (!emit) {
         return;
     }
+    
+    var w = canvas.width;
+    var h = canvas.height;
 
-    socket.emit("erasing", {x, y, radius}); 
+    socket.emit("erasing", {x: x / w, y: y / h, radius}); 
 }
 
 function onMouseDown(e) {
-    drawing = true;
-    current.x = e.clientX || e.touches[0].clientX;
-    current.y = e.clientY || e.touches[0].clientY;
+    if (tool == "draw") {
+        drawing = true;
+        current.x = e.clientX || e.touches[0].clientX;
+        current.y = e.clientY || e.touches[0].clientY;
+    }
+    else if (tool == "erase") {
+        erasing = true;
+    }
 }
 
 
 function onMouseUp(e) {
-    if (!drawing) {
-        return;
+    if (erasing) {
+        erasing = false;
+        eraseLine(e.clientX, e.clientY, current.strokeSize, true);
     }
-    drawing = false;
-    drawLine(
-        current.x,
-        current.y,
-        e.clientX || e.touches[0].clientX,
-        e.clientY || e.touches[0].clientY,
-        current.color,
-        current.strokeSize,
-        true
-    );
+    else if(drawing) {
+        drawing = false;
+        drawLine(
+            current.x,
+            current.y,
+            e.clientX || e.touches[0].clientX,
+            e.clientY || e.touches[0].clientY,
+            current.color,
+            current.strokeSize,
+            true
+        );
+    }
 }
 
 function onMouseMove(e) {
-    if (!drawing) {
-        return;
+    if (erasing) {
+        eraseLine(e.clientX, e.clientY, current.strokeSize, true)
     }
-    drawLine(
-        current.x,
-        current.y,
-        e.clientX || e.touches[0].clientX,
-        e.clientY || e.touches[0].clientY,
-        current.color,
-        current.strokeSize,
-        true
-    );
-    current.x = e.clientX || e.touches[0].clientX;
-    current.y = e.clientY || e.touches[0].clientY;
+    else if (drawing) {
+        drawLine(
+            current.x,
+            current.y,
+            e.clientX || e.touches[0].clientX,
+            e.clientY || e.touches[0].clientY,
+            current.color,
+            current.strokeSize,
+            true
+        );
+        current.x = e.clientX || e.touches[0].clientX;
+        current.y = e.clientY || e.touches[0].clientY;
+    }
 }
 
 // dekstop events
@@ -218,3 +239,10 @@ function onDrawingEvent(data) {
     drawLine(data.x0 * w, data.y0 * h, data.x1 * w, data.y1 * h, data.color, data.strokeSize);
 }
 socket.on("drawing", onDrawingEvent);
+
+function onErasingEvent(data) {
+    var w = canvas.width;
+    var h = canvas.height;
+    eraseLine(data.x * w, data.y * h, data.radius);
+}
+socket.on("erasing", onErasingEvent);

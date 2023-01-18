@@ -14,8 +14,6 @@ body {
 
 #UI {
     position: absolute;
-    margin-left: auto;
-    margin-right: auto;
     left: 0;
     right: 0;
     text-align: center;
@@ -39,7 +37,13 @@ body {
     cursor: pointer;
     margin-top: 0px;
 }
+input[type='range'] {
+    filter: invert(76%) sepia(79%) saturate(680%) hue-rotate(145deg) brightness(125%) contrast(102%);
+}
 
+#buttons {
+    margin-right: 30px;
+}
 
 .color {
     position: relative;
@@ -52,7 +56,6 @@ body {
     cursor: pointer;
 }
 .color:hover {
-    border: 5px solid rgba(0, 255, 255, 0.5);
     padding: 45px;
     transition: 0.5s;
 }
@@ -75,29 +78,56 @@ body {
 #green {
     background-color: green;
 }
-#blue{
+#blue {
     background-color: blue;
 }
+#yellow {
+    background-color: yellow;
+}
 
-#tools {
-    display: inline;
-    margin-left: 10px;
-    pointer-events: all;
-}
 .tool {
-    width: 30px;
-    height: auto;
-    transition: 0.5s;
-}
-.tool:hover {
     width: 45px;
     height: auto;
     transition: 0.5s;
 }
+.tool:hover {
+    width: 55px;
+    height: auto;
+    transition: 0.5s;
+}
+.tool2 {
+    width: 55px;
+    height: auto;
+    transition: 0.5s;
+}
+.tool2 {
+    filter: invert(95%) sepia(28%) saturate(6641%) hue-rotate(102deg) brightness(106%) contrast(101%);
+    transition: 0s;
+}
+#tools {
+    position: absolute;
+    left: 0;
+    right: 0;
+    text-align: center;
+    width: 100%;
+    bottom: 1%;
+    margin-bottom: 0px;
+    z-index: 2;
+    pointer-events: none;
+}
 #erase {
+    pointer-events: all;
+    cursor: pointer;
     background: none;
     border: none;
-    vertical-align: middle;
+    margin-right: 190px;
+}
+#draw {
+    pointer-events: all;
+    cursor: pointer;
+    background: none;
+    border: none;
+    margin-left: 180px;
 }
 
 /* draw.html css */
@@ -117,6 +147,9 @@ body {
     border: 50px;
     border-radius: 25px;
     z-index: 5;
+}
+hr {
+    border-top: 2px solid white;
 }
 
 #userinput {
@@ -169,7 +202,7 @@ body {
 #hide {
     opacity: 0%;
     pointer-events: none;
-    transition: 0.5s;
+    transition: 0.7s;
 }
 
 
@@ -210,6 +243,16 @@ body {
     text-align: center;
     z-index: 3;
     transition: 0.5s;
+}
+
+#roomcode {
+    width: 80%;
+    right: 10%;
+    position: absolute;
+    bottom: 5px;  
+    font-size: 20px;
+    font-family:"Arial",Times,serif;
+    color: white;  
 }
 
 #arrowR {
@@ -256,8 +299,8 @@ body {
 #blur {
     position: absolute;
     background-color: rgba(255, 255, 255, 0.1);
-    -webkit-backdrop-filter: blur(3px);
-    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(4px);
+    backdrop-filter: blur(4px);
     width: 100%;
     height: 100%;
     z-index: 4;
