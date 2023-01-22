@@ -5,7 +5,7 @@ const { REPL_MODE_SLOPPY } = require("repl");
 const app = express();
 const http = require("http").Server(app); // creating server
 const io = require("socket.io")(http);
-const port = 3000;
+const port = 433;
 
 app.use("/", express.static(__dirname + "/public"));
 
