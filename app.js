@@ -7,7 +7,7 @@ const http = require("http").Server(app); // creating server
 const io = require("socket.io")(http);
 const port = 10000;
 
-app.use("/", express.static(__dirname + "/public"));
+app.use(express.static(__dirname + "/public"));
 
 var clients = [];
 
