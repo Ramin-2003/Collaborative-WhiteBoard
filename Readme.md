@@ -7,7 +7,7 @@ Built the front-end using HTML/CSS and JavaScript, and implemented
 the real-time collaboration functionality using Node.JS.
 
 
-Visual: ![screenshot](/src/main/webapp/Assets/screenshot.jpg)
+Visual: ![screenshot](/Public/Assets/screenshot.jpg)
 
 
 ### How to run:
