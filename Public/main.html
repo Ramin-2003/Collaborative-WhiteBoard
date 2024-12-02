@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang = "en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name = "viewport" content = "width=device-width, initial-scale=1.0" />
+        <title>Collaborative Whiteboard</title>
+        <link rel="stylesheet" href="style.css" />
+        <script src ="/socket.io/socket.io.js"></script>
+    </head> 
+
+    <body>
+        <div id="menu">
+            <div id="box">
+                <div id="userinput">
+                    <h1 class="text">Username:</h1>
+                    <input type="text" maxlength="20" class="textbox" id="nameinput">
+                    <br><br><br>
+                    <h2 class="text">Room Code:</h2>
+                    <input type="text" maxlength="25" class="textbox" id="roominput">
+                    <br>
+                    <p id="error"> </p>
+                    <br><br>
+                    <button onclick="createRoom()" id="create">Create</button>
+                    <button onclick="joinRoom()" id="join">Join</button>
+                </div>
+            </div> 
+        </div>
+
+        <div id="blur"></div>
+
+
+        <div class="users" id="container">
+            <div id="userlist"></div>
+            <span id="roomcode">
+                <h3><hr><strong>Room Code</strong></h3>
+                <p id="code"></p>
+            </span>
+        </div>
+        <button onclick="translation()" id="arrowR"><strong>></strong></button>
+
+        <!--Drawing-->
+
+        <canvas class = "whiteboard"> </canvas>
+
+        <div id = "UI">
+            <div id = "buttons">
+                <button onclick="colorChange(id)" class = "color2" id = "black"></button>
+                <button onclick="colorChange(id)" class = "color" id = "red"></button>
+                <button onclick="colorChange(id)" class = "color" id = "green"></button>
+                <button onclick="colorChange(id)" class = "color" id = "blue"></button>
+                <button onclick="colorChange(id)" class = "color" id = "yellow"></button>
+            </div>
+            
+            <div id="tools">
+                <button onclick="toolCurrent(id)" id="erase"><img src="./Assets/eraser.png" id="eraser" class="tool"></button>
+                <button onclick="toolCurrent(id)" id="draw"><img src="./Assets/drawer.png" id="drawer" class="tool2"></button>
+            </div>
+            
+            <input type="range" min="1" max="55" value="10" id="slider">
+        </div>
+
+        <svg width="100%" height="100%" id="grid">
+            <pattern id="pattern-circles" x="0" y="0" width="50" height="50" patternUnits="userSpaceOnUse" patternContentUnits="userSpaceOnUse">
+               <circle id="pattern-circle" cx="10" cy="10" r="1.6257413380501518" fill="#000" fill-opacity="0.5"></circle>
+            </pattern>
+            <rect  id="rect" x="0" y="0" width="100%" height="100%" fill="url(#pattern-circles)"></rect>
+        </svg>
+
+        <script src ="script.js"></script>
+    </body>
+
+
+</html>
