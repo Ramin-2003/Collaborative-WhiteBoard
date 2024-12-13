@@ -4,7 +4,7 @@
   "description": "A online collaborative whiteboard in real time",
   "main": "app.js",
   "scripts": {
-    "start": "nodemon app"
+    "start": "node app.js"
   },
   "repository": {
     "type": "git",
@@ -23,10 +23,11 @@
   },
   "homepage": "https://github.com/Ramin-2003/Collaborative-WhiteBoard#readme",
   "dependencies": {
+    "aws-amplify": "^6.10.0",
     "express": "^4.18.2",
     "socket.io": "^4.5.4"
   },
   "devDependencies": {
-    "nodemon": "^2.0.20"
+    "nodemon": "^3.1.7"
   }
 }

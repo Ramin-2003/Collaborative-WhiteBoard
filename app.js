@@ -4,10 +4,20 @@ const { disconnect } = require("process");
 const { REPL_MODE_SLOPPY } = require("repl");
 const app = express();
 const http = require("http").Server(app); // creating server
-const io = require("socket.io")(http);
+const io = require("socket.io")(http, {
+    cors: {
+        origin: "http://d239cx6anf1qh8.cloudfront.net", // Replace with your CloudFront domain
+        methods: ["GET", "POST"],
+        allowedHeaders: ["Content-Type"],
+        credentials: true
+    }
+});
 const port = 10000;
 
-app.use("/", express.static(__dirname + "/public"));
+// Health check endpoint
+app.get("/health", (req, res) => {
+    res.status(200).send("OK");
+});
 
 var clients = [];
 

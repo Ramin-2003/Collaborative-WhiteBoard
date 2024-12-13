@@ -1,5 +1,5 @@
 // socket initialization
-var socket = io();
+var socket = io("ws://whiteboard-alb-533726129.ca-central-1.elb.amazonaws.com"); // change to wss:// when switching to https
 
 
 // rooms logic
