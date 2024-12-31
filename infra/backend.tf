@@ -238,7 +238,7 @@ resource "aws_iam_role" "ecs_task_role" { # ecs app permissions
 }
 resource "aws_iam_role_policy_attachment" "ecs_custom_policy" {
   role       = aws_iam_role.ecs_task_role.name
-  policy_arn = "arn:aws:iam::aws:policy/AmazonS3ReadOnlyAccess" #placeholder
+  policy_arn = "arn:aws:iam::aws:policy/AmazonDynamoDBFullAccess"
 }
 
 resource "aws_ecs_task_definition" "ecs_task" {

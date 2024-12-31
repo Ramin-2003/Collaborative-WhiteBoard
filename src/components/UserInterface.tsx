@@ -18,18 +18,18 @@ export default function UserInterface({
   const [sliderValue, setSliderValue] = useState(10);
 
   function onColorChange(color: string): void {
-    setSelectedColor(color); // Update the selected color
-    handleColorChange(color); // Notify the parent component
+    setSelectedColor(color);
+    handleColorChange(color);
   }
 
   function onToolChange(tool: string): void {
-    setSelectedTool(tool); // Update the selected tool
-    handleToolChange(tool); // Notify the parent component
+    setSelectedTool(tool);
+    handleToolChange(tool);
   }
 
   function onSizeChange(size: number): void {
-    setSliderValue(size); // Update the selected size
-    handleSizeChange(size); // Notify the parent component
+    setSliderValue(size);
+    handleSizeChange(size);
   }
 
   return (
