@@ -34,9 +34,9 @@
 #####################################
 
 resource "aws_vpc" "main" {
-  cidr_block           = "10.0.0.0/16"
-  enable_dns_hostnames = true
-  enable_dns_support   = true
+  cidr_block                       = "10.0.0.0/16"
+  enable_dns_hostnames             = true
+  enable_dns_support               = true
   assign_generated_ipv6_cidr_block = true
 }
 
@@ -74,7 +74,7 @@ resource "aws_route_table" "public" {
 
   route {
     ipv6_cidr_block = "::/0"
-    gateway_id = aws_internet_gateway.main.id
+    gateway_id      = aws_internet_gateway.main.id
   }
 }
 
@@ -95,7 +95,7 @@ resource "aws_route_table" "private" {
   vpc_id = aws_vpc.main.id
 
   route {
-    ipv6_cidr_block = "::/0"
+    ipv6_cidr_block        = "::/0"
     egress_only_gateway_id = aws_egress_only_internet_gateway.private.id
   }
 }
@@ -159,15 +159,15 @@ resource "aws_lb" "main" {
   security_groups    = [aws_security_group.alb_security.id]
   subnets            = aws_subnet.public[*].id
 
-  enable_deletion_protection = false
+  enable_deletion_protection       = false
   enable_cross_zone_load_balancing = true
-  idle_timeout              = 150
+  idle_timeout                     = 150
 }
 
 # ALB Listener
 resource "aws_lb_listener" "websocket" {
   load_balancer_arn = aws_lb.main.arn
-  port              = 80  # Or 443 for HTTPS
+  port              = 80 # Or 443 for HTTPS
   protocol          = "HTTP"
 
   default_action {
@@ -242,21 +242,21 @@ resource "aws_iam_role_policy_attachment" "ecs_custom_policy" {
 }
 
 resource "aws_ecs_task_definition" "ecs_task" {
-  family = "whiteboard-task"
-  execution_role_arn = aws_iam_role.ecs_execution_role.arn
-  task_role_arn = aws_iam_role.ecs_task_role.arn
-  network_mode = "awsvpc"
+  family                   = "whiteboard-task"
+  execution_role_arn       = aws_iam_role.ecs_execution_role.arn
+  task_role_arn            = aws_iam_role.ecs_task_role.arn
+  network_mode             = "awsvpc"
   requires_compatibilities = ["EC2"]
 
   container_definitions = jsonencode([{
-    name = "whiteboard-container"
-    image = "public.ecr.aws/e3m8x5b2/raminsarwer/collaborative-whiteboard:latest"
-    cpu = 256
-    memory = 512
+    name      = "whiteboard-container"
+    image     = "public.ecr.aws/e3m8x5b2/raminsarwer/collaborative-whiteboard:latest"
+    cpu       = 256
+    memory    = 512
     essential = true
     portMappings = [{
-        containerPort = 10000
-        hostPort      = 10000
+      containerPort = 10000
+      hostPort      = 10000
     }]
   }])
 }
@@ -307,7 +307,7 @@ resource "aws_launch_template" "ecs_launch_template" {
 
   network_interfaces {
     device_index                = 0
-    associate_public_ip_address = false 
+    associate_public_ip_address = true
     security_groups             = [aws_security_group.ecs_security.id]
   }
 }
@@ -315,10 +315,10 @@ resource "aws_launch_template" "ecs_launch_template" {
 # Define the Auto Scaling Group
 resource "aws_autoscaling_group" "ecs_asg" {
   desired_capacity    = 1
-  max_size           = 1
-  min_size           = 1
-  vpc_zone_identifier = aws_subnet.public[*].id  # Changed to public subnets
-  
+  max_size            = 1
+  min_size            = 1
+  vpc_zone_identifier = aws_subnet.public[*].id # Changed to public subnets
+
   launch_template {
     id      = aws_launch_template.ecs_launch_template.id
     version = "$Latest"
@@ -333,8 +333,8 @@ resource "aws_ecs_service" "ecs_service" {
   launch_type     = "EC2"
 
   network_configuration {
-    subnets          = aws_subnet.private[*].id
-    security_groups  = [aws_security_group.ecs_security.id]
+    subnets         = aws_subnet.private[*].id
+    security_groups = [aws_security_group.ecs_security.id]
   }
 
   load_balancer {
@@ -346,5 +346,20 @@ resource "aws_ecs_service" "ecs_service" {
   deployment_circuit_breaker {
     enable   = true
     rollback = false
+  }
+}
+
+
+resource "aws_dynamodb_table" "room_data" {
+  name         = "whiteboard"
+  billing_mode = "PROVISIONED" # Use provisioned capacity
+  hash_key     = "room_code"   # Partition Key
+
+  read_capacity  = 2 # Allocate read capacity (within free tier)
+  write_capacity = 2 # Allocate write capacity (within free tier)
+
+  attribute {
+    name = "room_code"
+    type = "S" # String
   }
 }

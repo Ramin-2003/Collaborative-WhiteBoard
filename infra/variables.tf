@@ -1,17 +1,17 @@
 variable "website_root" {
   type        = string
   description = "Path to the root of website content"
-  default     = "../Public"
+  default     = "../dist"
 }
 
 variable "bucket_name" {
-  type = string
+  type        = string
   description = "Name of S3 bucket"
-  default = "collaborative-whiteboard-q9jxs64y"
+  default     = "collaborative-whiteboard-q9jxs64y"
 }
 
 variable "website_index_document" {
-  type = string
+  type        = string
   description = "The websites index document"
-  default = "index.html"
+  default     = "index.html"
 }
