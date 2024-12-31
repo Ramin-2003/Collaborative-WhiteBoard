@@ -5,7 +5,9 @@ import UserList from "./components/UserList";
 import UserInterface from "./components/UserInterface";
 import { io, Socket } from "socket.io-client";
 
-const socket: Socket = io("ws://localhost:10000"); //"ws://whiteboard-alb-1288423591.ca-central-1.elb.amazonaws.com"
+const socket: Socket = io(
+  "ws://whiteboard-alb-1288423591.ca-central-1.elb.amazonaws.com"
+);
 function App() {
   const [showMenu, setShowMenu] = useState(true); // Controls if Menu is shown
   const [users, setUsers] = useState<string[]>([]);
